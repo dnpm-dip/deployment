@@ -10,18 +10,13 @@ None a.t.m
 
 ## :arrow_right: Migration Notes
 
-Due to a minor but breaking change in API URI paths, the local NGINX reverse proxy configurations, which are created by `init.sh`
- but not _updated_ if already present, require manual intervention to be up to date again:
-* `nginx/sites-enabled/reverse-proxy.conf`
-* `nginx/sites-enabled/tls-reverse-proxy.conf`
+For sites connected to the central "NGINX Broker":
 
-Please perform one of the following:
+Due to a change of the server certificate issuing process (certificates are now issued by [HARICA](https://www.harica.gr/) on behalf of DFN),
+the NGINX broker's new server certificate has a _new_ issuer chain.
+In the NGINX _forward_ proxy configuration for "remote host verification", the previously used `certs/dfn-ca-cert.pem` file (containing the GEANT issuer chain) must thus be accordingly replaced.
 
-* If you are using the essentially unadapted reverse proxy configs, please remove the local copies and run `init.sh` again to create up-to-date copies
-* If you already have too many local adaptations, please adapt the `location` blocks for backend API calls according to the templates:
-    * Reverse proxy: see [here](https://github.com/KohlbacherLab/dnpm-dip-deployment/blob/8ac8ddf0caaf9d826994835530a4efc4b3fa8905/nginx/sites-available/reverse-proxy.template.conf#L24-L30)
-    * TLS reverse proxy: see [here](https://github.com/KohlbacherLab/dnpm-dip-deployment/blob/8ac8ddf0caaf9d826994835530a4efc4b3fa8905/nginx/sites-available/tls-reverse-proxy.template.conf#L39-L45)
-    * :warning: Note the trailing slashes in both `location /api/ { ... }` entries
+Please either update your deployment repo and restart your docker setup to migrate, or perform the corresponding changes to the NGINX config manually
 
 
 ## Pre-requisites
@@ -154,8 +149,8 @@ Provide these by either _overwriting_ the respective files in `./certs`, or simp
 >
 >| File                      | Meaning                                                           | 
 >|---------------------------|-------------------------------------------------------------------|
->| `./certs/dfn-ca-cert.pem`      | Certificate chain of the central broker's server certificate (for remote host verification)                     |
->| `./certs/dnpm-ca-cert.pem`     | Certificate of the DNPM CA from which the client certificates originate (for client verification in mutual TLS) |
+>| `./certs/ca-chain.pem`     | Certificate chain of the central broker's server certificate (for remote host verification)                     |
+>| `./certs/dnpm-ca-cert.pem` | Certificate of the DNPM CA from which the client certificates originate (for client verification in mutual TLS) |
 
 
 #### :bangbang: Securing Backend APIs
