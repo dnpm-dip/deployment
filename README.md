@@ -13,10 +13,16 @@ None a.t.m
 For sites connected to the central "NGINX Broker":
 
 Due to a change of the server certificate issuing process (certificates are now issued by [HARICA](https://www.harica.gr/) on behalf of DFN),
-the NGINX broker's new server certificate has a _new_ issuer chain.
-In the NGINX _forward_ proxy configuration for "remote host verification", the previously used `certs/dfn-ca-cert.pem` file (containing the GEANT issuer chain) must thus be accordingly replaced.
+the NGINX broker's new server certificate has a _new_ issuer CA chain.
+In the NGINX _forward_ proxy configuration for "remote host verification", the previously used `certs/dfn-ca-cert.pem` file (containing the GEANT issuer chain) must be replaced.
 
-Please either update your deployment repo and restart your docker setup to migrate, or perform the corresponding changes to the NGINX config manually
+Please perform the following:
+
+* Update your deployment repo to get the new CA chain and changes to template files
+* Either:
+    * In case you only made minimal adaptations to the NGINX configuration files created from the templates upon initial setup: re-run `init.sh` to re-create the config from updated templates.
+    * Else perform the [file rename change](https://github.com/dnpm-dip/deployment/blob/ce95a5785e29cda18614b3ff992ac325ed7813f5/nginx/sites-available/forward-proxy.template.conf#L15) manually in the NGINX forward proxy configuration under `./nginx/sites-enabled.conf`
+* Restart your docker setup
 
 
 ## Pre-requisites
