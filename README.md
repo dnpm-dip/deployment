@@ -16,12 +16,12 @@ Due to a change of the server certificate issuing process (certificates are now 
 the NGINX broker's new server certificate has a _new_ issuer CA chain.
 In the NGINX _forward_ proxy configuration for "remote host verification", the previously used `certs/dfn-ca-cert.pem` file (containing the GEANT issuer chain) must be replaced.
 
-Please perform the following:
+Please follow these steps:
 
-* Update your deployment repo to get the new CA chain and changes to template files
+* Update your deployment repo to get the new CA chain and changes to template files: `git pull`
 * Either:
-    * In case you only made minimal adaptations to the NGINX configuration files created from the templates upon initial setup: re-run `init.sh` to re-create the config from updated templates.
-    * Else perform the [file rename change](https://github.com/dnpm-dip/deployment/blob/ce95a5785e29cda18614b3ff992ac325ed7813f5/nginx/sites-available/forward-proxy.template.conf#L15) manually in the NGINX forward proxy configuration under `./nginx/sites-enabled.conf`
+    * If you made no local adaptations to the NGINX forward proxy configuration file created from the template upon initial setup, re-create the config from the updated template: `cp ./nginx/sites-available/forward-proxy.template.conf ./nginx/sites-enabled/forward-proxy.conf`
+    * Else perform the [file name change](https://github.com/dnpm-dip/deployment/blob/ce95a5785e29cda18614b3ff992ac325ed7813f5/nginx/sites-available/forward-proxy.template.conf#L15) manually in the NGINX forward proxy configuration under `./nginx/sites-enabled/forward-proxy.conf` manually
 * Restart your docker setup
 
 
