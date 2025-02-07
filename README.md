@@ -100,7 +100,7 @@ Basic configuration occurs via environment variables in file `.env`.
 | `BACKEND_CONNECTOR_TYPE`  |       ❌     | Set to one of { `broker`, `peer2peer` } to specify the desired connector type (see below)                                                                                                                                                                  | 
 | `BACKEND_RD_RANDOM_DATA`  |       ❌     | Set to a positive integer to activate in-memory generation of Rare Diseases (RD) random data (for test purposes)                                                                                                                                           |
 | `BACKEND_MTB_RANDOM_DATA` |       ❌     | Set to a positive integer to activate in-memory generation of Mol. Tumor Board (MTB) random data (for test purposes)                                                                                                                                       |
-| `BACKEND_HGNC_GENESET_URL`|       ❌     | The DNPM:DIP application needs the [Complete HGNC Gene Set (JSON)](https://genenames.org/download/). By default, the official URL will be used to attempt downloading it, but in case this URL is not accessible from your setup infrastructure, you can override the default value e.g. to provide the URL of a proxy. | 
+| `BACKEND_HGNC_GENESET_URL`|       ❌     | The DNPM:DIP application needs the [Complete HGNC Gene Set (JSON)](https://genenames.org/download/). By default, the official URL will be used to attempt downloading it, but in case this URL is not accessible from your setup infrastructure, you can override the default value e.g. to provide the URL of a proxy. See [details below](https://github.com/dnpm-dip/deployment?tab=readme-ov-file#hgnc-gene-set-provision)| 
 
 -------
 ### Proxy Setup
@@ -341,15 +341,15 @@ DNPM:DIP thus has various strategies to obtain a regularly updated version of th
 ##### Download 
 By default, the application attempts to download the HGNC gene set from where it is provided by HUGO (see [https://genenames.org/download/](https://genenames.org/download/) - Complete set new JSON).
 
-Given that this host might not be available from within your secluded clinical network, an alternative URL can be defined via environment variable `BACKEND_HGNC_GENESET_URL` in `.env` (see above).
+Given that this host might not be available from within your secluded clinical network, an alternative URL can be defined via environment variable `BACKEND_HGNC_GENESET_URL` in [`.env`](https://github.com/dnpm-dip/deployment?tab=readme-ov-file#docker-compose-environment).
 This could point to some local proxy for the HGNC gene set: `BACKEND_HGNC_GENESET_URL=http://HOSTNAME/hgnc_complete_set.json`
 
 ###### NGINX Broker as HGNC Proxy 
 A regularly updated version of the HGNC gene set is provided via the central NGINX server acting as Broker for DNPM. If your site is connected to this NGINX Broker, you can thus simply configure the backend to fetch it from there via the DNPM:DIP setup's local NGINX _forward_ proxy by setting `BACKEND_HGNC_GENESET_URL=http://nginx:9010/hgnc_complete_set.json`.
 
 ##### File provision
-Alternatively, DNPM:DIP looks for the HGNC complete set JSON file under `.../hgnc/hgnc_complete_set.json` in the docker volume `backend-data` used for persistence (see above).
-Instead of enabling direct download by DNPM:DIP, you can also directly provide it yourself by setting up a regular update of this file (e.g. as a `cronjob`) in the folder corresponding to this docker volume. Here as a bash script sample:
+Alternatively, DNPM:DIP looks for the HGNC complete set JSON file under `.../hgnc/hgnc_complete_set.json` in the docker volume [`backend-data`](https://github.com/dnpm-dip/deployment/blob/c7e593622c5dc0e7fb8b98e0093add4c658f5246/docker-compose.yml#L5) used for persistence (see above).
+Instead of enabling direct download by DNPM:DIP, you can thus also provide it yourself by setting up a regular download and update of this file (e.g. as a `cronjob`) in the folder corresponding to this docker volume. Here as a bash script sample:
 
 ```bash
 #!/bin/bash
@@ -360,6 +360,7 @@ curl -X GET https://storage.googleapis.com/public-download-files/hgnc/json/json/
 # Move it to the location where expected by DNPM:DIP
 mv hgnc_complete_set.json /var/lib/docker/volumes/..._backend-data/_data/hgnc/hgnc_complete_set.json
 ```
+
 ##### Fallback
 In case of failure to obtain an up-to-date HGNC gene set, the application falls back to a pre-packaged, but thus possibly older version of it.
 
