@@ -332,6 +332,38 @@ The connector based on a peer-to-peer network topology, i.e. with direct connect
 In this case, each external peer's Site ID, Name, and BaseURL must be configured in a dedicated element, as shown in the [template](https://github.com/KohlbacherLab/dnpm-dip-deployment/blob/master/backend-config/config.template.xml#L15).
 
 
+#### HGNC Gene Set Provision
+
+DNPM:DIP uses many different code/terminology systems. Whereas most of these, e.g. ICD-10-GM, ICD-O-3, ATC, etc come pre-packaged with the backend component,
+the HGNC gene set must be actively provided, as it changes more rapidly than most other code systems with a yearly versioning scheme.
+DNPM:DIP thus has various strategies to obtain a regularly updated version of the HGNC Gene Set (JSON).
+
+##### Download 
+By default, the application attempts to download the HGNC gene set from where it is provided by HUGO (see [https://genenames.org/download/](https://genenames.org/download/) - Complete set new JSON).
+
+Given that this host might not be available from within your secluded clinical network, an alternative URL can be defined via environment variable `BACKEND_HGNC_GENESET_URL` in `.env` (see above).
+This could point to some local proxy for the HGNC gene set: `BACKEND_HGNC_GENESET_URL=http://HOSTNAME/hgnc_complete_set.json`
+
+###### NGINX Broker as HGNC Proxy 
+A regularly updated version of the HGNC gene set is provided via the central NGINX server acting as Broker for DNPM. If your site is connected to this NGINX Broker, you can thus simply configure the backend to fetch it from there via the DNPM:DIP setup's local NGINX _forward_ proxy by setting `BACKEND_HGNC_GENESET_URL=http://nginx:9010/hgnc_complete_set.json`.
+
+##### File provision
+Alternatively, DNPM:DIP looks for the HGNC complete set JSON file under `.../hgnc/hgnc_complete_set.json` in the docker volume `backend-data` used for persistence (see above).
+Instead of enabling direct download by DNPM:DIP, you can also directly provide it yourself by setting up a regular update of this file (e.g. as a `cronjob`) in the folder corresponding to this docker volume. Here as a bash script sample:
+
+```bash
+#!/bin/bash
+
+# Download hgnc_complete_set.json, e.g.
+curl -X GET https://storage.googleapis.com/public-download-files/hgnc/json/json/hgnc_complete_set.json > hgnc_complete_set.json
+
+# Move it to the location where expected by DNPM:DIP
+mv hgnc_complete_set.json /var/lib/docker/volumes/..._backend-data/_data/hgnc/hgnc_complete_set.json
+```
+##### Fallback
+In case of failure to obtain an up-to-date HGNC gene set, the application falls back to a pre-packaged, but thus possibly older version of it.
+
+
 ## Further Links
 
 * DNPM:DIP Backend: [REST API Docs](https://github.com/KohlbacherLab/dnpm-dip-api-gateway/blob/main/app/controllers/README.md)
