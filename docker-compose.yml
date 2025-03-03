@@ -97,6 +97,19 @@ services:
     networks:
       dnpm:
 
+  polling_module:
+    image: ${POLLING_MODULE_IMAGE:-ghcr.io/dnpm-dip/http-polling-module}:${POLLING_MODULE_IMAGE_TAG:-latest}
+    pull_policy: ${PULL_POLICY:-always}
+    restart: unless-stopped
+    profiles: [polling]
+    volumes:
+      - './polling-config/config.properties:/opt/config.properties'
+    depends_on:
+      nginx:
+        condition: service_started
+    networks:
+      dnpm:
+
 networks:
   dnpm:
     driver: bridge
