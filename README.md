@@ -264,12 +264,12 @@ Adapt the hostname of the broker server in this file, especially in case your si
 ### Polling Setup 
 
 The DIP backend is a server component. For situations in which inbound HTTPS to it is not admissible, a polling-based layer of indirection is required. 
-One option in conjunction with the central NGINX broker is the [HttpPollingModule](https://github.com/stefan-m-lenz/HttpPollingModule), which has been included in the [default depoyment](https://github.com/dnpm-dip/deployment/blob/9831c676b40c41d55fda7219f2dbe2ef213d56e6/docker-compose.yml#L100-L111) setup.
+One option in conjunction with the central NGINX broker is the [HttpPollingModule](https://github.com/stefan-m-lenz/HttpPollingModule), which has been included in the [default deployment](https://github.com/dnpm-dip/deployment/blob/9831c676b40c41d55fda7219f2dbe2ef213d56e6/docker-compose.yml#L100-L111) setup.
 
 Here are the necessary steps in order to activate the polling module:
 
 * In the local [NGINX forward proxy](https://github.com/dnpm-dip/deployment?tab=readme-ov-file#forward-proxy) configuration file `./nginx/sites-enabled/forward-proxy.conf` (created from the template file in `./nginx/sites-available/`),
- uncomment the [`location` block acting as proxy](https://github.com/dnpm-dip/deployment/blob/9831c676b40c41d55fda7219f2dbe2ef213d56e6/nginx/sites-available/forward-proxy.template.conf#L21-L25) and also set the virtual host name of your site's queue server in the central NGINX broker.
+ uncomment the `location` block acting as [queue proxy](https://github.com/dnpm-dip/deployment/blob/9831c676b40c41d55fda7219f2dbe2ef213d56e6/nginx/sites-available/forward-proxy.template.conf#L21-L25) and also set the virtual host name of your site's queue server in the central NGINX broker.
 * When starting the docker compose setup, activate the `polling` [profile](https://docs.docker.com/compose/how-tos/profiles/): `docker compose --profile polling up`
 
 Alternatively, your site can use the Samply Infrastructure.
