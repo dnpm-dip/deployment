@@ -1,8 +1,5 @@
 # DNPM:DIP - Deployment/Operation Instructions
 
-> 🚧 **Work in Progress**
-
-
 ## Known Issues
 
 None a.t.m
@@ -102,6 +99,7 @@ Basic configuration occurs via environment variables in file `.env`.
 | `BACKEND_MTB_RANDOM_DATA` |       ❌     | Set to a positive integer to activate in-memory generation of Mol. Tumor Board (MTB) random data (for test purposes)                                                                                                                                       |
 | `BACKEND_HGNC_GENESET_URL`|       ❌     | The DNPM:DIP application needs the [Complete HGNC Gene Set (JSON)](https://genenames.org/download/). By default, the official URL will be used to attempt downloading it, but in case this URL is not accessible from your setup infrastructure, you can override the default value e.g. to provide the URL of a proxy. See [details below](https://github.com/dnpm-dip/deployment?tab=readme-ov-file#hgnc-gene-set-provision)| 
 
+
 -------
 ### Proxy Setup
 
@@ -166,7 +164,7 @@ Some of the backend's API endpoints meant to be accessed by "system agents" inst
 | API | URI pattern | Purpose |
 |--------|---------------|----------|
 | Peer-to-Peer API | `/api/{usecase}/peer2peer/...` | Calls among DNPM:DIP nodes (status check, federated queries) | 
-| [ETL API](https://github.com/KohlbacherLab/dnpm-dip-api-gateway/tree/8839e7dc3672144493c4fe22d94bc09154077126/app/controllers#example-data-and-etl-api) | `/api/{usecase}/etl/...` | Integration with local ETL setup (data upload, deletion) |
+| [ETL API](https://github.com/dnpm-dip/api-gateway/tree/8839e7dc3672144493c4fe22d94bc09154077126/app/controllers#example-data-and-etl-api) | `/api/{usecase}/etl/...` | Integration with local ETL setup (data upload, deletion) |
 
 The following sections describe available options for the respective sub-API.
 
@@ -174,7 +172,7 @@ The following sections describe available options for the respective sub-API.
 ##### Peer-to-Peer API
 ---------
 
-The setup varies depending on whether your site is connected to the "NGINX Broker" with inbound HTTPS or outbound-only HTTPS with the MIRACUM Polling Module, or whether you are connected to the Samply Broker.
+The setup varies depending on whether your site is connected to the "NGINX Broker" with inbound HTTPS or outbound-only HTTPS with the MIRACUM Polling Module (see [below](https://github.com/dnpm-dip/deployment?tab=readme-ov-file#polling-setup)), or whether you are connected to the Samply Broker.
 
 **Case: NGINX Broker with inbound HTTPS**
 
@@ -200,8 +198,7 @@ In this case, you could split the reverse proxy configuration accordingly, and p
 
 **Case: NGINX Broker with Polling Module (outbound-only HTTPS)**
 
-In this case, given that the "peer-to-peer API" is not directly exposed to incoming requests from the broker, but reached indirectly via the Polling Module
- (most likely running on the same VM), the mutual TLS check might be discarded altogether. 
+In this case, given that the "peer-to-peer API" is not directly exposed to incoming requests from the broker, but reached indirectly via the Polling Module, the mutual TLS check might be discarded altogether. 
 
 **Case: Samply Beam Connect**
 
@@ -264,6 +261,21 @@ Adapt the hostname of the broker server in this file, especially in case your si
 
 
 -------
+### Polling Setup 
+
+The DIP backend is a server component. For situations in which inbound HTTPS to it is not admissible, a polling-based layer of indirection is required. 
+One option in conjunction with the central NGINX broker is the [HttpPollingModule](https://github.com/stefan-m-lenz/HttpPollingModule), which has been included in the [default depoyment](https://github.com/dnpm-dip/deployment/blob/9831c676b40c41d55fda7219f2dbe2ef213d56e6/docker-compose.yml#L100-L111) setup.
+
+Here are the necessary steps in order to activate the polling module:
+
+* In the local [NGINX forward proxy](https://github.com/dnpm-dip/deployment?tab=readme-ov-file#forward-proxy) configuration file `./nginx/sites-enabled/forward-proxy.conf` (created from the template file in `./nginx/sites-available/`),
+ uncomment the [`location` block acting as proxy](https://github.com/dnpm-dip/deployment/blob/9831c676b40c41d55fda7219f2dbe2ef213d56e6/nginx/sites-available/forward-proxy.template.conf#L21-L25) and also set the virtual host name of your site's queue server in the central NGINX broker.
+* When starting the docker compose setup, activate the `polling` [profile](https://docs.docker.com/compose/how-tos/profiles/): `docker compose --profile polling up`
+
+Alternatively, your site can use the Samply Infrastructure.
+
+
+-------
 ### Backend
 
 The following components/functions of the backend are configured via external configuration files.
@@ -308,7 +320,7 @@ Logging is based on [SLF4J](https://slf4j.org/).
 The SLF4J implementation plugged in by the Play Framework is [Logback](https://logback.qos.ch/), which is configured via file `./backend-config/logback.xml`.
 The default settings in the template define a daily rotating log file `dnpm-dip-backend[-{yyyy-MM-dd}].log` stored in sub-folder `/logs` of the docker volume bound for persistence (see above).
 
-You might consider removing/deactivating the logging [appender to STDOUT](https://github.com/KohlbacherLab/dnpm-dip-deployment/blob/master/backend-config/logback.template.xml#L30)
+You might consider removing/deactivating the logging [appender to STDOUT](https://github.com/dnpm-dip/deployment/blob/master/backend-config/logback.template.xml#L30)
 
 
 -------
@@ -329,7 +341,7 @@ If desired, you can override the request time-out (seconds), and in case you pre
 
 The connector based on a peer-to-peer network topology, i.e. with direct connections among DNPM:DIP nodes. (Provided only for potential backward compatibility with the "bwHealthCloud" infrastructure).
 
-In this case, each external peer's Site ID, Name, and BaseURL must be configured in a dedicated element, as shown in the [template](https://github.com/KohlbacherLab/dnpm-dip-deployment/blob/master/backend-config/config.template.xml#L15).
+In this case, each external peer's Site ID, Name, and BaseURL must be configured in a dedicated element, as shown in the [template](https://github.com/dnpm-dip/deployment/blob/master/backend-config/config.template.xml#L15).
 
 
 #### HGNC Gene Set Provision
@@ -367,5 +379,5 @@ In case of failure to obtain an up-to-date HGNC gene set, the application falls 
 
 ## Further Links
 
-* DNPM:DIP Backend: [REST API Docs](https://github.com/KohlbacherLab/dnpm-dip-api-gateway/blob/main/app/controllers/README.md)
+* DNPM:DIP Backend: [REST API Docs](https://github.com/dnpm-dip/api-gateway/blob/main/app/controllers/README.md)
 
