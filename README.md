@@ -1,4 +1,6 @@
-# DNPM:DIP - Deployment/Operation Instructions
+# DIP: Deployment/Operation Instructions
+
+[![main](https://github.com/dnpm-dip/deployment/actions/workflows/main.yml/badge.svg)](https://github.com/dnpm-dip/deployment/actions/workflows/main.yml)
 
 ## Known Issues
 
