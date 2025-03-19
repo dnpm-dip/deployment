@@ -164,7 +164,7 @@ Some of the backend's API endpoints meant to be accessed by "system agents" inst
 | API | URI pattern | Purpose |
 |--------|---------------|----------|
 | Peer-to-Peer API | `/api/{usecase}/peer2peer/...` | Calls among DNPM:DIP nodes (status check, federated queries) | 
-| [ETL API](https://github.com/dnpm-dip/api-gateway/tree/8839e7dc3672144493c4fe22d94bc09154077126/app/controllers#example-data-and-etl-api) | `/api/{usecase}/etl/...` | Integration with local ETL setup (data upload, deletion) |
+| [ETL API](https://github.com/dnpm-dip/api-gateway/blob/main/app/controllers/README.md#example-data-and-etl-api) | `/api/{usecase}/etl/...` | Integration with local ETL setup (data upload, deletion) |
 
 The following sections describe available options for the respective sub-API.
 
