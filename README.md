@@ -101,7 +101,7 @@ Basic configuration occurs via environment variables in file `.env`.
 | `BACKEND_MTB_RANDOM_DATA` |      ❌     | Set to a positive integer to activate in-memory generation of Mol. Tumor Board (MTB) random data (for test purposes)                                                                                                                                       |
 | `BACKEND_HGNC_GENESET_URL`|      ❌     | The DNPM:DIP application needs the [Complete HGNC Gene Set (JSON)](https://genenames.org/download/). By default, the official URL will be used to attempt downloading it, but in case this URL is not accessible from your setup infrastructure, you can override the default value e.g. to provide the URL of a proxy. See [details below](https://github.com/dnpm-dip/deployment?tab=readme-ov-file#hgnc-gene-set-provision)| 
 | `PORTAL_IMAGE_TAG`        |      ❌     | Used to override the default tag for the `portal` docker image |
-| `BACKEND_IMAGE_TAG`       |      ❌     | Used to override the default tag for the `portal` docker image |
+| `BACKEND_IMAGE_TAG`       |      ❌     | Used to override the default tag for the `backend` docker image |
 
 
 -------
