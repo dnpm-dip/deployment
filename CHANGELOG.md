@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/dnpm-dip/deployment/compare/v1.2.0...v1.2.1) (2025-07-18)
+
+
+### Bug Fixes
+
+* Corrected entry to ENV variables ([a4ae940](https://github.com/dnpm-dip/deployment/commit/a4ae94072dd0172a1521555fd957e4120997b0cc))
+* Updated list of configurable ENV variables ([f5624ce](https://github.com/dnpm-dip/deployment/commit/f5624ce36204a84107db75338e38234c98fa3987))
+
 ## [1.2.0](https://github.com/dnpm-dip/deployment/compare/v1.1.0...v1.2.0) (2025-03-07)
 
 
