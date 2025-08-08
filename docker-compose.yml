@@ -59,7 +59,7 @@ services:
       dnpm:
 
   backend:
-    image: ${BACKEND_IMAGE:-ghcr.io/dnpm-dip/backend}:${BACKEND_IMAGE_TAG:-latest}
+    image: ${BACKEND_IMAGE:-ghcr.io/dnpm-dip/api-gateway}:${BACKEND_IMAGE_TAG:-latest}
     pull_policy: ${PULL_POLICY:-always}
     restart: unless-stopped
     environment:
