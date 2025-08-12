@@ -70,6 +70,7 @@ services:
       - CONNECTOR_TYPE=${BACKEND_CONNECTOR_TYPE:-broker}
       - AUTHUP_URL=robot://system:${AUTHUP_SECRET:-start123}@http://authup:3000
       - HGNC_GENESET_URL=${BACKEND_HGNC_GENESET_URL:-https://storage.googleapis.com/public-download-files/hgnc/json/json/hgnc_complete_set.json}  # Default: Official URL (Source: https://genenames.org/download/)
+      - TZ=${LOCAL_TIMEZONE:-Europe/Berlin}
     volumes:
       - './backend-config:/dnpm_config'
       - backend-data:/dnpm_data
