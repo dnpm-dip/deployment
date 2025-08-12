@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.1](https://github.com/dnpm-dip/deployment/compare/v1.2.0...v1.2.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* Added ENV variable TZ for the timezone within the backend, in order for Local(Date)Time to have the correct value instead of UTC time ([931087f](https://github.com/dnpm-dip/deployment/commit/931087fc3fcbacbc860e5dbcfdb8493ec43da559))
+* Corrected entry to ENV variables ([a4ae940](https://github.com/dnpm-dip/deployment/commit/a4ae94072dd0172a1521555fd957e4120997b0cc))
+* Updated backend docker image name ([9e86c35](https://github.com/dnpm-dip/deployment/commit/9e86c3582d0b2331ed772c0d8307275baa91bfc1))
+* Updated list of configurable ENV variables ([f5624ce](https://github.com/dnpm-dip/deployment/commit/f5624ce36204a84107db75338e38234c98fa3987))
+
 ## [1.2.0](https://github.com/dnpm-dip/deployment/compare/v1.1.0...v1.2.0) (2025-03-07)
 
 
