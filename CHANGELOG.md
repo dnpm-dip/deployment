@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/dnpm-dip/deployment/compare/v1.2.1...v1.2.2) (2025-10-22)
+
+
+### Bug Fixes
+
+* Adapted polling-config to work out-of-the-box by forwarding to the built-in rev. proxy instead of the backend directly (because of URI-prefix-removal problem) ([05dd705](https://github.com/dnpm-dip/deployment/commit/05dd70555f1aa63b5fb8348a20d7c1e3b9148689))
+
 ## [1.2.1](https://github.com/dnpm-dip/deployment/compare/v1.2.0...v1.2.1) (2025-08-12)
 
 
