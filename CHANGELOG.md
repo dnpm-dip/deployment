@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0](https://github.com/dnpm-dip/deployment/compare/v1.2.1...v1.3.0) (2025-11-24)
+
+
+### Features
+
+* Added configurability of image tag for mysql, authup and nginx-proxy docker images via ENV variable ([1199844](https://github.com/dnpm-dip/deployment/commit/119984428f94968c90387120cbde94c882c8c473))
+
+
+### Bug Fixes
+
+* Adapted polling-config to work out-of-the-box by forwarding to the built-in rev. proxy instead of the backend directly (because of URI-prefix-removal problem) ([05dd705](https://github.com/dnpm-dip/deployment/commit/05dd70555f1aa63b5fb8348a20d7c1e3b9148689))
+
 ## [1.2.1](https://github.com/dnpm-dip/deployment/compare/v1.2.0...v1.2.1) (2025-08-12)
 
 
