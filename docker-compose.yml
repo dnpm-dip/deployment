@@ -6,7 +6,7 @@ volumes:
 
 services:
   mysql:
-    image: ${MYSQL_IMAGE:-mysql}:latest
+    image: ${MYSQL_IMAGE:-mysql}:${MYSQL_IMAGE_TAG:-9}
     pull_policy: ${PULL_POLICY:-always}
     restart: unless-stopped
     healthcheck:
@@ -23,7 +23,7 @@ services:
       dnpm:
 
   authup:
-    image: ${AUTHUP_IMAGE:-authup/authup}:latest
+    image: ${AUTHUP_IMAGE:-authup/authup}:${AUTHUP_IMAGE_TAG:-1}
     pull_policy: ${PULL_POLICY:-always}
     restart: unless-stopped
     volumes:
@@ -81,7 +81,7 @@ services:
       dnpm:
 
   nginx:
-    image: ${NGINX_IMAGE:-nginxproxy/nginx-proxy}:alpine
+    image: ${NGINX_IMAGE:-nginxproxy/nginx-proxy}:${NGINX_IMAGE_TAG:-alpine}
     ports:
       - ${HTTPS_PORT:-443}:443
       - ${HTTP_PORT:-80}:80
