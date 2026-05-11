@@ -81,6 +81,7 @@ Basic configuration occurs via environment variables in file `.env`.
 | `BACKEND_HGNC_GENESET_URL`|      ❌     | The DNPM:DIP application needs the [Complete HGNC Gene Set (JSON)](https://genenames.org/download/). By default, the official URL will be used to attempt downloading it, but in case this URL is not accessible from your setup infrastructure, you can override the default value e.g. to provide the URL of a proxy. See [details below](https://github.com/dnpm-dip/deployment?tab=readme-ov-file#hgnc-gene-set-provision)| 
 | `PORTAL_IMAGE_TAG`        |      ❌     | Used to override the default tag for the `portal` docker image |
 | `BACKEND_IMAGE_TAG`       |      ❌     | Used to override the default tag for the `backend` docker image |
+| `BACKEND_FEDERATED_QUERY_USE_CASES` |      ❌     | Used to activate federated queries for selected use cases. Format: CSV string , e.g: "MTB,RD" |
 
 
 -------
