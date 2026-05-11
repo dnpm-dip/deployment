@@ -71,6 +71,7 @@ services:
       - AUTHUP_URL=client://system:${AUTHUP_SECRET:-start123}@http://authup:3000
       - HGNC_GENESET_URL=${BACKEND_HGNC_GENESET_URL:-https://storage.googleapis.com/public-download-files/hgnc/json/json/hgnc_complete_set.json}  # Default: Official URL (Source: https://genenames.org/download/)
       - TZ=${LOCAL_TIMEZONE:-Europe/Berlin}
+      - ACTIVE_FEDERATED_QUERY_USE_CASES=${BACKEND_FEDERATED_QUERY_USE_CASES:-}
     volumes:
       - './backend-config:/dnpm_config'
       - backend-data:/dnpm_data
