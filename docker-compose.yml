@@ -35,9 +35,9 @@ services:
     environment:
       - PUBLIC_URL=${BASE_URL}/auth/
       - AUTHORIZE_REDIRECT_URL=${BASE_URL}
-      - ROBOT_ADMIN_ENABLED=true
-      - ROBOT_ADMIN_SECRET=${AUTHUP_SECRET:-start123}
-      - ROBOT_ADMIN_SECRET_RESET=true
+      - CLIENT_SYSTEM_ENABLED=true
+      - CLIENT_SYSTEM_SECRET=${AUTHUP_SECRET:-start123}
+      - CLIENT_SYSTEM_SECRET_RESET=true
       - DB_TYPE=mysql
       - DB_HOST=mysql
       - DB_USERNAME=root
@@ -68,7 +68,7 @@ services:
       - MTB_RANDOM_DATA=${BACKEND_MTB_RANDOM_DATA:--1}
       - HATEOAS_HOST=${BASE_URL}/api
       - CONNECTOR_TYPE=${BACKEND_CONNECTOR_TYPE:-broker}
-      - AUTHUP_URL=robot://system:${AUTHUP_SECRET:-start123}@http://authup:3000
+      - AUTHUP_URL=client://system:${AUTHUP_SECRET:-start123}@http://authup:3000
       - HGNC_GENESET_URL=${BACKEND_HGNC_GENESET_URL:-https://storage.googleapis.com/public-download-files/hgnc/json/json/hgnc_complete_set.json}  # Default: Official URL (Source: https://genenames.org/download/)
       - TZ=${LOCAL_TIMEZONE:-Europe/Berlin}
     volumes:
