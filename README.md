@@ -269,7 +269,7 @@ nginx:
 # Server name override required, because the upstream certificate doesn't match 'host.docker.internal'
 proxy_ssl_name dnpm.medizin.uni-tuebingen.de;
 ...
-proxy_pass https://host.docker.internal:8553
+proxy_pass https://host.docker.internal:8553;
 ```
 
 -------
