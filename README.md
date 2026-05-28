@@ -251,10 +251,12 @@ because NGINX cannot be configured to use a proxy when acting as proxy client.
 For this situation, one possible solution is to use `socat` along the following lines to set up TCP forwarding to `dnpm.medizin.uni-tuebingen.de` via the local VM port `8553`:
 
 * Install `socat`
-* Example `socat` configuration:
+* Example `socat` configuration: Adapt `PROXY_IP` and `PROXY_PORT`
 ```
-socat -d -d -v TCP4-LISTEN:8553,reuseaddr,fork PROXY:{PROXY_IP}:dnpm.medizin.uni-tuebingen.de:443,proxyport={PROXY_PORT}
+socat TCP4-LISTEN:8553,reuseaddr,fork PROXY:{PROXY_IP}:dnpm.medizin.uni-tuebingen.de:443,proxyport={PROXY_PORT}
 ```
+This had best be set up as a service unit, in order to avoid having to execute the command every time.
+
 * In `docker-compose.yml` add `extra_hosts` to service `nginx`:
 ```yaml
 nginx:
