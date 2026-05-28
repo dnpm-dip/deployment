@@ -243,6 +243,32 @@ Adapt the hostname of the broker server in this file, especially in case your si
 > Ideally, once the connection between the DNPM:DIP node setup and broker server (i.e. either thr "NGINX Broker" or Samply Beam Proxy) is possible, you should activate
 > the second `location` block commented by default.
 
+##### Making NGINX forward proxy pass through a corporate proxy
+
+In case your site has a "corporate proxy" to forward requests out of the local/clinical network to the central NGINX broker, some more elaborate tweaks are required
+because NGINX cannot be configured to use a proxy when acting as proxy client.
+
+For this situation, one possible solution is to use `socat` along the following lines to set up TCP forwarding to `dnpm.medizin.uni-tuebingen.de` via the local VM port `8553`:
+
+* Install `socat`
+* Example `socat` configuration:
+```
+socat -d -d -v TCP4-LISTEN:8553,reuseaddr,fork PROXY:{PROXY_IP}:dnpm.medizin.uni-tuebingen.de:443,proxyport={PROXY_PORT}
+```
+* In `docker-compose.yml` add `extra_hosts` to service `nginx`:
+```yaml
+nginx:
+   ...
+   extra_hosts:
+   - "host.docker.internal:host-gateway"
+```
+* In `./nginx/sites-enabled/forward-proxy.conf` adapt `proxy_pass` directives to go via `host.docker.internal:8553`:
+```nginx
+# Server name override required, because the upstream certificate doesn't match 'host.docker.internal'
+proxy_ssl_name dnpm.medizin.uni-tuebingen.de;
+...
+proxy_pass https://host.docker.internal:8553
+```
 
 -------
 ### Polling Setup 
