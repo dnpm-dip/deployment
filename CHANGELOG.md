@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0](https://github.com/dnpm-dip/deployment/compare/v1.2.1...v1.3.0) (2026-06-01)
+
+
+### Features
+
+* Added configurability of image tag for mysql, authup and nginx-proxy docker images via ENV variable ([1199844](https://github.com/dnpm-dip/deployment/commit/119984428f94968c90387120cbde94c882c8c473))
+* migrated to client auth ([28c9c4f](https://github.com/dnpm-dip/deployment/commit/28c9c4f1f8fbcd1e9723a46d4bf38afd5d5cecdb))
+
+
+### Bug Fixes
+
+* Adapted polling-config to work out-of-the-box by forwarding to the built-in rev. proxy instead of the backend directly (because of URI-prefix-removal problem) ([05dd705](https://github.com/dnpm-dip/deployment/commit/05dd70555f1aa63b5fb8348a20d7c1e3b9148689))
+* Added ENV variable to allow activating query modules ([206d9c0](https://github.com/dnpm-dip/deployment/commit/206d9c041c83e362ae9fe66da89889ab8dfd759e))
+* Added HARICA Root 2021 to ca-chain.pem for remote host verification ([90102de](https://github.com/dnpm-dip/deployment/commit/90102ded7e4b87b4098327e31ad48eeccce6adb3))
+* Removed trailing whitespace in polling-config, which lead to errors in request handling in polling-module ([f9d431f](https://github.com/dnpm-dip/deployment/commit/f9d431f1618e9795207cd11602a068fa8877eb8c))
+
 ## [1.2.1](https://github.com/dnpm-dip/deployment/compare/v1.2.0...v1.2.1) (2025-08-12)
 
 
