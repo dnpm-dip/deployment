@@ -259,18 +259,35 @@ socat TCP4-LISTEN:8553,reuseaddr,fork PROXY:{PROXY_IP}:dnpm.medizin.uni-tuebinge
 This had best be set up as a service unit, in order to avoid having to execute the command every time.
 
 * In `docker-compose.yml` add `extra_hosts` to service `nginx`:
+
+**Variant 1**: via `host.docker.internal` 
 ```yaml
 nginx:
-   ...
-   extra_hosts:
-   - "host.docker.internal:host-gateway"
+  ...
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
 ```
-* In `./nginx/sites-enabled/forward-proxy.conf` adapt `proxy_pass` directives to go via `host.docker.internal:8553`:
+
+**Variant 2**: Alternatively, this explicit setting might work, depending on your local setup
+```yaml
+nginx:
+  ...
+  extra_hosts:
+    - "dnpm.medizin.uni-tuebingen.de:127.0.0.1"
+```
+
+* In `./nginx/sites-enabled/forward-proxy.conf` adapt `proxy_pass` directives:
+
+In case of the first `extra_hosts` setting above (via `host.docker.internal:8553`):
 ```nginx
-# Server name override required, because the upstream certificate doesn't match 'host.docker.internal'
+# Server name override required, because the upstream certificate doesn't match 'host.docker.internal'.
 proxy_ssl_name dnpm.medizin.uni-tuebingen.de;
 ...
 proxy_pass https://host.docker.internal:8553;
+```
+But in case of the second explicit setting, the `proxy_ssl_name` directive can be skipped:
+```nginx
+proxy_pass https://dnpm.medizin.uni-tuebingen.de:8553;
 ```
 
 -------
