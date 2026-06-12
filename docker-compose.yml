@@ -33,6 +33,7 @@ services:
         condition: service_healthy
     command: server/core start
     environment:
+      - ADDITIONAL_DOMAINS=${BASE_URL}
       - PUBLIC_URL=${BASE_URL}/auth/
       - AUTHORIZE_REDIRECT_URL=${BASE_URL}
       - CLIENT_SYSTEM_ENABLED=true
