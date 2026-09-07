@@ -1,6 +1,5 @@
 
 volumes:
-  authup:
   mysql:
   backend-data:
 
@@ -23,19 +22,21 @@ services:
       dnpm:
 
   authup:
-    image: ${AUTHUP_IMAGE:-authup/authup}:${AUTHUP_IMAGE_TAG:-1}
+    image: ${AUTHUP_IMAGE:-authup/authup}:${AUTHUP_IMAGE_TAG:-1.0.0-beta.64}
     pull_policy: ${PULL_POLICY:-always}
     restart: unless-stopped
-    volumes:
-      - authup:/usr/src/app/writable
     depends_on:
       mysql:
         condition: service_healthy
-    command: server/core start
+    command: start
     environment:
-      - ADDITIONAL_DOMAINS=${BASE_URL}
       - PUBLIC_URL=${BASE_URL}/auth/
-      - AUTHORIZE_REDIRECT_URL=${BASE_URL}
+      # Renamed from ADDITIONAL_DOMAINS. The portal runs the authorization-code
+      # flow against Authup's built-in `admin-console` client, so its origin has
+      # to be trusted for the redirect back to <portal-origin>/login/callback.
+      - TRUSTED_ORIGINS=${BASE_URL}
+      # Authup bundles its consoles and serves them under ${BASE_URL}/auth/console/*
+      # (admin, account, auth). All three are enabled by default.
       - CLIENT_SYSTEM_ENABLED=true
       - CLIENT_SYSTEM_SECRET=${AUTHUP_SECRET:-start123}
       - CLIENT_SYSTEM_SECRET_RESET=true
@@ -56,6 +57,9 @@ services:
       - NUXT_PUBLIC_API_URL=${BASE_URL}/api/
       - NUXT_AUTHUP_URL=http://authup:3000/
       - NUXT_PUBLIC_AUTHUP_URL=${BASE_URL}/auth/
+      # Authup serves the account console under /console/* now; without this the
+      # portal falls back to <NUXT_PUBLIC_AUTHUP_URL>/account, which 404s.
+      - NUXT_PUBLIC_ACCOUNT_URL=${BASE_URL}/auth/console/account
     networks:
       dnpm:
 
