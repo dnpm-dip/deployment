@@ -22,7 +22,7 @@ services:
       dnpm:
 
   authup:
-    image: ${AUTHUP_IMAGE:-authup/authup}:${AUTHUP_IMAGE_TAG:-1.0.0-beta.64}
+    image: ${AUTHUP_IMAGE:-authup/authup}:${AUTHUP_IMAGE_TAG:-latest}
     pull_policy: ${PULL_POLICY:-always}
     restart: unless-stopped
     depends_on:
