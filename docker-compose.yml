@@ -77,6 +77,8 @@ services:
       - HGNC_GENESET_URL=${BACKEND_HGNC_GENESET_URL:-https://storage.googleapis.com/public-download-files/hgnc/json/json/hgnc_complete_set.json}  # Default: Official URL (Source: https://genenames.org/download/)
       - TZ=${LOCAL_TIMEZONE:-Europe/Berlin}
       - ACTIVE_FEDERATED_QUERY_USE_CASES=${BACKEND_FEDERATED_QUERY_USE_CASES:-}
+      # Override JAVA_OPTS due to CVE-2026-114938
+      - JAVA_OPTS='-Xmx6g -XX:-UseBASE64Intrinsics'
     volumes:
       - './backend-config:/dnpm_config'
       - backend-data:/dnpm_data
